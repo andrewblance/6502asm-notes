@@ -3,11 +3,13 @@ title: "Assembly Notes"
 author: "Andrew Blance"
 date: "`r Sys.Date()`"
 bibliography: book.bib
-description: This is a minimal example of using the bookdown package to write a book.
-  The output format for this example is bookdown::gitbook.
+description: This is my notes on 6502 asm
 documentclass: book
 fontsize: 11pt
+github-repo: andrewblance/6502asm-notes
 link-citations: yes
+lof: yes
+lot: yes
 mainfont: Palatino
 monofont: Source Code Pro
 monofontoptions: Scale=0.8
