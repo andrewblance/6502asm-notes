@@ -1,0 +1,65 @@
+# Data Representation {#bin}
+
+We need to look at the computer's internal and external representation of data - this is binary and ASCII. Its external representation (what we have as input or output) is decimal or hexadecimal.
+
+## Internal Representations 
+
+* A bit is a binary digit - a 0 or a 1
+
+* 4 bits is a nibble, 8 is a byte
+
+Microprocessors, like the 6502, store data internally as bytes. This data will need to be the program instructions and the data itself. The data will either be numeric or alphanumeric.
+
+### Program Instructions
+
+A program is essentially a list of instructions. These are stored as single or multiple bytes. The 6502 fetches bytes from memory. Therefore, a single byte instruction is faster than a multiple byte instruction. This is an important consideration when programming the 6502. The instructions the 6502 has will be discussed later.
+
+### Numeric Data
+
+#### Signed Binary {-}
+
+The left most bit is used for the sign. 
+
+1 is: ```0000 0001``` while -1 is: ```1000 0001```
+
+Some problems:
+
+* The maximum magnitude is now 127 - we can maybe live with that
+* Addition doesn't work
+
+#### One and Two's Complement {-}
+
+One's Complement:
+
+1 is ```0000 0001``` while -1 is: ```1111 1110```
+
+Addition still does not work
+
+Two's Complement:
+
+You do One's Complement, then, for the negative number, add 1
+
+3 is: ```0000 0011``` while -3 is ```1111 1101```
+
+Everything Works! This is the representation of binary that will be used from now on. 
+
+#### The Carry and the Overflow {-}
+
+While adding/ subtracting numbers there are things to look for.
+
+* If you add 128 (```1000 0000```) and 129 (```1000 0001```) is 257. The binary addition will result in ```(1) 0000 0001```. This extra, ninth bit, is the **Carry** bit. This needs to be recognised and handled inside the processor. 
+
+* Adding 64 (```0100 0000```) and 65 (```0100 0001```) results in ```1000 0001```, which is -127, and wrong. This is because of an internal carry from bit 6 to bit 7. When this bit change, that results in a sign change, occurs, this is what is called the **Overflow** bit.
+
+### Alphanumeric Data
+
+Its ASCII, you get it.
+
+## External Representations
+
+Its hexadecimal, you get it.
+
+Sometimes just like decimals as well, you also get it.
+
+fuck BCD and octadecimal.
+[@zaks]

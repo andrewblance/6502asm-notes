@@ -1,0 +1,41 @@
+# The Apple ][ {#a2}
+
+We need to be able to actually run the code we have looked at. To compile and run 6502 assembly we will either need to:
+
+* Install a 6502 compiler and loader we will use to compile our code. Then, transfer it to an emulator based on a machine that used 6502 architecture. 
+* Install an emulator of a 6502 machine, and write and compile our code directly on that. This seems more fun
+
+The apple ][ was made in 1977, and went on to be one of the best selling computers of all time. Writing our code this ways allows us to:
+
+* learn about a whole other thing: the apple 2!
+* allows us to understand the context the era that used 6502 asm, and better appreciate what it would have been like to be a programmer then
+* other options would have been the C64, etc.
+
+We will also describe, later, how to compile 6502asm on a modern machine.
+
+## Requirements
+Wine, Merlin! [@merlin]
+
+### Ciderpress
+
+* how does this relate to applewin
+
+### AppleWin
+
+* how to set it up
+* what are disks/ versions of dos
+
+## Using the Apple ][
+Talk about:
+
+* Basic - what is it, code in magazines
+* Disks, loading into things
+* what if i didnt boot into dos?
+* The "OS", navigating the machine
+
+## Example
+
+* the internet archive
+* Lode Runner
+
+

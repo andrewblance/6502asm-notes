@@ -1,0 +1,16 @@
+bookdown::gitbook:
+  css: css/style.css
+  config:
+    toc:
+      collapse: none 
+      before: |
+        <li><a href="./">Assembly Notes</a></li>
+      after: |
+        <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+    download: ["pdf"]
+bookdown::pdf_book:
+  includes:
+    in_header: latex/preamble.tex
+  latex_engine: pdflatex
+  citation_package: natbib
+  keep_tex: yes

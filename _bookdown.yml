@@ -1,0 +1,7 @@
+book_filename: "6502asm"
+delete_merged_file: true
+output_dir: _book
+clean: [packages.bib]
+language:
+  ui:
+    chapter_name: "Chapter "

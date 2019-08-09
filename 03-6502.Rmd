@@ -1,0 +1,37 @@
+# The 6502 
+
+sixty-five-oh-two
+
+## System Organisation
+
+A microcomputer (cause they were a lot smaller than other computers in the 70s..) looks like:
+
+It consists of:
+
+* The _microprocessor_ (MPU), ie, the 6502. This has 3 buses:
+    * The _data-bus_
+    * The _address-bus_
+    * The _control-bus_
+
+The MPU requires precision timing, supplied by a dope crystal. It supples the features of a _central processing unit_ (CPU). This includes:
+* The _arithmetic-logical-unit_ (ALU)
+* The _control-unit_ (CU)
+
+Other parts of the machine are: 
+
+* _Read Only Memory_ (ROM)
+* _Random Access Memory_ (RAM)
+* The Programmable I/O (PIO)
+
+## Internal Organisation
+
+* The ALU. This has 2 inputs, accumulates them
+* The pin diagram
+
+## Instruction Cycle
+
+It has to send/ recieve signals. Coolio.
+
+## The Stack (but not the heap)
+
+[@zaks]

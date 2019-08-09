@@ -1,0 +1,72 @@
+# (PART) Assembly {-}
+
+# Intro to the 6502 Assembly
+
+This is the point of this notes, yeah!
+
+## What is Assembly?
+
+Very low level language, really as low as you can go.
+
+How does 6502 asm differ from x86, and why?
+
+## Introducing Instructions
+### Addition (CLC, CLD, LDA, ADC, STA)
+
+```
+    CLC             ; clear carry bit    
+    CLD             ; clear decimal bit
+
+    LDA     ADR1    ; load op1 into accumulator
+    ADC     ADR2    ; add op2 to accumulator
+    STA     ADR3    ; save result to adr3
+```
+
+### Subtraction (SEC, SBC)
+
+```
+    CLD             ; clear decimal bit
+    SEC             ; set carry to 1
+
+    LDA     ADR1    ; load op1 into accumulator
+    SBC     ADR2    ; op1 - op2
+    STA     ADR3    ; save result to adr3
+```
+
+### Multiplication (LDX, LSR, BCC, ASL, ROL, DEX, BNE)
+
+```
+        LDA     #0       ; zero accumulator
+        STA     TMP      ; clear adress
+        STA     RESAD    ; clear
+        STA     RESAD+1  ; clear
+        LDX     #8       ; x is a counter
+MULT    LSR     MPRAD    ; shift mpr right
+        BCC     NOADD    ; test carry bit
+        LDA     RESAD    ; load a with low res
+        CLC 
+        ADC     MPDAD    ; add mpd to res
+        STA     RESAD    ; save result
+        LDA     RESAD+1  ; add rest off shifted mpd
+        ADC     TMP      
+        STA     RESAD+1
+NOADD   ASL     MPDAD    ; shift mpd left
+        ROL     TMP      ; save bit from mpd
+        DEX              ; decrement counter
+        BNE     MULT     ; go again if counter 0
+```
+
+### Division
+### Some Logic (CMP, BEQ, AND, ORA, EOR)
+
+## Subroutines
+
+## Compiling and running code with Merlin
+
+* the addition and multiplication examples
+* using merlin
+* commands
+* compiling and running code
+* checking the answer
+
+[@zaks]
