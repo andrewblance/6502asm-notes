@@ -16,24 +16,114 @@ A program is essentially a list of instructions. These are stored as single or m
 
 ### Numeric Data
 
+To represent numeric data a numerous cases need to be taken care of. Firstly, we'll look at integers, which we'll represent with direct binary. Here, the right most bit represents 2^0^, the next one to the left is 2^1^, then 2^2^, and so on. The eights bits ($b$) of one byte will be represented as:
+
+$$ b_{7}b_{6}b_{5}b_{4}b_{3}b_{2}b_{1}b_{0} $$
+
+The powers of 2 are:
+
+$$ 2^7 = 128,\;2^6 = 64,\;2^5 = 32,\;2^4 = 16,\;2^3 = 8,\;2^2 = 4,\;2^1 = 2,\;2^0 = 1 $$
+
+So, a binary number, like ```0010 0011``` is:
+
+$$ 
+\begin{aligned}
+ &  \quad b_{5} + b_{1} + b_{0} \\
+ &  = 2^{5} + 2^{1} + 2^{0} \\
+ &  = 32 + 2 + 1 \\
+ &  = 35 
+\end{aligned}
+$$
+
+You can go the other way to, from decimal to binary. Lets try 35 again:
+
+$$
+\begin{aligned}
+& 35 \div 2 = 17 r 1 \rightarrow 1 \\
+& 17 \div 2 =\enspace8 r 1 \rightarrow 1 \\
+&\enspace8 \div 2 =\enspace4 r 0 \rightarrow 0 \\
+&\enspace4 \div 2 =\enspace2 r 0 \rightarrow 0 \\
+&\enspace2 \div 2 =\enspace1 r 0 \rightarrow 0 \\
+&\enspace1 \div 2 =\enspace0 r 1 \rightarrow 1 \\
+&\enspace0 \div 2 =\enspace0 r 0 \rightarrow 0 \\
+&\enspace0 \div 2 =\enspace0 r 0 \rightarrow 0 \\
+\end{aligned}
+$$
+
+This method give us a result of ```0010 0011```, which is what we'd expect.
+
+Addition works as it would "normally". Single bits follow these rules:
+
+$$
+\begin{aligned}
+& 0 + 0 = \quad\;0 \\
+& 1 + 0 = \quad\;1 \\
+& 0 + 1 = \quad\;1 \\
+& 1 + 1 = (1)0 \\
+\end{aligned}
+$$
+
+The $(1)$ represents a carry. Note, $10$ is the binary equivilent of 2. $2 + 1$ is done like:
+
+$$
+\begin{aligned}
+& \enspace\; 10 \\
+& \underline{+01} \\
+& \enspace\; 11 \\
+\end{aligned}
+$$
+
+The bits can "carry", like in normal integer addition. $3 + 1$ is:
+
+$$
+\begin{aligned}
+& \enspace\; 0011 \\
+& \underline{+0001} \\
+& \enspace\; 0100 \\
+\end{aligned}
+$$
+
+Our binary numbers can add correctly, and we can represent our integers correctly. However, there are two problems:
+
+* We can only go up to 255 (if we only use 8 bits)
+* We can only represent positive numbers
+
+To solve the latter issue, we will introduce signed binary.
+
 #### Signed Binary {-}
 
 The left most bit is used for the sign. 
 
 1 is: ```0000 0001``` while -1 is: ```1000 0001```
 
-Some problems:
+Immediatelly, we have reduced the magnitude from 255 to 127, oops. We can represent negative numbers now however. Lets try addition, $7$ and $-5$:
 
-* The maximum magnitude is now 127 - we can maybe live with that
-* Addition doesn't work
+$$
+\begin{aligned}
+& \enspace\; 0000 0111 \\
+& \underline{+1000 0101} \\
+& \enspace\; 1000 1100 \\
+\end{aligned}
+$$
+
+This is a problem, ```1000 1100``` is $-12$, which is clearly wrong. The solution to this is _two's complement_. To get to this point we will first have to introduce _one's complement_.
 
 #### One and Two's Complement {-}
 
-One's Complement:
+In One's Complement the positive number stays the same, ie, 1 is still```0000 0001```.
+However, to get the negative we "swap" all the bits - all 0's become 1's and all 1's become 0's. This means -1 is: ```1111 1110```. As with signed binary, all positive numbers start with 0 and all negatives start with 1.
 
-1 is ```0000 0001``` while -1 is: ```1111 1110```
+Lets try adding $-4$ and $+6$:
 
-Addition still does not work
+$$
+\begin{aligned}
+& \enspace\; 1111 0011 \\
+& \underline{+0000 0110} \\
+& \enspace\; 0000 0001 \\
+\end{aligned}
+$$
+
+We have got a result of $1$, instead of $2$. We will have to expand one's complement before we get correct addition.
 
 Two's Complement:
 
