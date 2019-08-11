@@ -1,6 +1,14 @@
 # Data Representation {#bin}
 
-We need to look at the computer's internal and external representation of data - this is binary and ASCII. Its external representation (what we have as input or output) is decimal or hexadecimal.
+Like many other examples we will come across, you can go very far in modern computing without knowing things that are vital to know in assembly. In this case it is binary or hexadecimal. Why is it that?
+
+* The 6502 can do many operations (add, subtracting, moving things in memory) for which we don't need to understand binary, just hexadecimal. However, other operations we might like to do, such as multiplication and divide, are not things the 6502 can do natively. We need to create these functions ourselves (see Chapter \@ref(asm1)). For this we need to understand some intricacies of binary in order to perform the calculations.
+
+* To understand generally how the 6502 operates it will be useful to be familiar with terms like bit, byte and nibble (see Chapter \@ref(sixty)). 
+
+* A base 10 representation of numbers would be the ideal (in a human-readable sense, at least) way to deal with input and output. However, we will be required to use hexadecimal (though this does not mean we cannot convert it to base 10 later). So, to begin with at least, to understand our results, we will need to appreciate hexadecimal. 
+
+Data is represented differently _internally_ and _externally_. The internal representation covers the program instructions themself, numeric data and finally alphanumeric data. The external representation (what we interact with as input and output) is represented as hexadecimal.   
 
 ## Internal Representations 
 
@@ -110,14 +118,14 @@ This is a problem, ```1000 1100``` is $-12$, which is clearly wrong. The solutio
 
 #### One and Two's Complement {-}
 
-In One's Complement the positive number stays the same, ie, 1 is still```0000 0001```.
+In **One's Complement** the positive number stays the same, ie, 1 is still```0000 0001```.
 However, to get the negative we "swap" all the bits - all 0's become 1's and all 1's become 0's. This means -1 is: ```1111 1110```. As with signed binary, all positive numbers start with 0 and all negatives start with 1.
 
 Lets try adding $-4$ and $+6$:
 
 $$
 \begin{aligned}
-& \enspace\; 1111 0011 \\
+& \enspace\; 1111 1011 \\
 & \underline{+0000 0110} \\
 & \enspace\; 0000 0001 \\
 \end{aligned}
@@ -125,31 +133,40 @@ $$
 
 We have got a result of $1$, instead of $2$. We will have to expand one's complement before we get correct addition.
 
-Two's Complement:
+To arrive at **Two's Complement** you first make the transformation to One's Complement, then, for the negative number, add 1. So, 3 is: ```0000 0011``` while -3 is ```1111 1101```.
 
-You do One's Complement, then, for the negative number, add 1
+Lets try adding $-4$ and $6$ again:
 
-3 is: ```0000 0011``` while -3 is ```1111 1101```
+$$
+\begin{aligned}
+& \enspace\; 1111 1100 \\
+& \underline{+0000 0110} \\
+& \enspace\; 0000 0010 \\
+\end{aligned}
+$$
 
-Everything Works! This is the representation of binary that will be used from now on. 
+Which gives us 2, so now, finally, everything Works! This is the representation of binary that will be used from now on. 
 
 #### The Carry and the Overflow {-}
 
 While adding/ subtracting numbers there are things to look for.
 
-* If you add 128 (```1000 0000```) and 129 (```1000 0001```) is 257. The binary addition will result in ```(1) 0000 0001```. This extra, ninth bit, is the **Carry** bit. This needs to be recognised and handled inside the processor. 
+* If you add (unsigned binary) 128 (```1000 0000```) and (unsigned binary) 129 (```1000 0001```) is 257. The binary addition will result in ```(1) 0000 0001```. This extra, ninth bit, is the **Carry** bit. Our previous, two's complements, example of $-4$ and $6$ also includes a carry but this does not result in an incorrect result. This needs to be recognised and handled inside the processor. 
 
 * Adding 64 (```0100 0000```) and 65 (```0100 0001```) results in ```1000 0001```, which is -127, and wrong. This is because of an internal carry from bit 6 to bit 7. When this bit change, that results in a sign change, occurs, this is what is called the **Overflow** bit.
 
+The 6502 has flags in its architecture to keep track of the 2 scenarios.
+
 ### Alphanumeric Data
 
-Its ASCII, you get it.
+To represent Data we will use the ASCII encoding scheme. We will want to encode the 26 letters in both upper and lower case, plus 10 numbers, and then around 20 special symbols. This is all accomplished in 7 bits (which allows for 128 unique codes). The eighth bit can be used to verify that the contents of the byte has not been accidentally changed. This bit is called the _parity bit_. It is $1$ is there is an even number of bits set to $1$ and a $0$ is there is an odd number.
 
 ## External Representations
 
-Its hexadecimal, you get it.
+For the external representation of numeric data we can use hexadecimal. Here, digits are represented by the symbols $0$ to $9$, then $A$ to $F$. This range allows us to make the most of a nibble, using each combination to represent a symbol. Therefore, we can use a byte to hold 2 digits. So, $00$ = 0 and $FF$ = 255
 
-Sometimes just like decimals as well, you also get it.
+## Conclusions {-}
 
-fuck BCD and octadecimal.
+We have see how data is represented interally and externally while using the 6502. This is not an exhaustive list though. Other forms of binary numbers, representations of alphanumeric data and external representation all exist in the form of BCD, EBCDIC and octadecimal, respectively. Discussion of these have been omitted as over time they have become irrelevent, it is beyond our scope or, in the case of BCD, many machines using 6502 turn the instructions related to it off.
+
 [@zaks]

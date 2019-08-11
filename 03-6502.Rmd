@@ -1,4 +1,4 @@
-# The 6502 
+# The 6502 {#sixty}
 
 sixty-five-oh-two
 
