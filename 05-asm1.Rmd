@@ -2,15 +2,21 @@
 
 # Intro to the 6502 Assembly {#asm1}
 
-This is the point of this notes, yeah!
+Assembly is fundamentally different from most languages used at the moment. The version that is used on the 6502 is significantly different again from modern assembly. Regardless, I believe there is still value in learning this branch of assembly. While it is still complex, the architecture of the 6502 is simple in comparison to a modern processor. This relationship is true as well when comparing the instruction sets on 6502 assembly and x86-64 assembly (the version modern intel processors use). I argue, that this reduced complexity makes this earlier version a more pedagogical language.
+
+In this chapter we will discuss what assembly is and how it differs from a modern, high-level language. Then, there will be examples provided of numerous arithmetic operations and logic to show how assembly is constructed. There will be an introduction to subroutines, then finally how to actually compile and run this code will be shown.
 
 ## What is Assembly?
 
-Very low level language, really as low as you can go.
+Assembly is different from most languages used now. Languages like Python and R operate at a very high level in the computer. You are not expected (most of the time) to know what is happening "inside" the computer. In these high level languages the technical concepts of computing are abstracted away, allowing for a language style that is easily parsed by a human. This allows for code that, in concept, should be far easier to write and read. The penalty for this usability is the inability to really optimise performance.
 
-How does 6502 asm differ from x86, and why?
+Assembly is the total opposite of a high level language. Though the various flavours of assembly can add in more human-friendly features (multiplying, dividing, loops) the language is still as low-level you can go before writing machine code. In assembly, you are talking directly to the machine, specifying the exact parts of memory you want to perform operations on. These operation too are very low level, consisting of instructions like "add", "move" or "break". The availability of instructions depends directly on the architecture you are using. 
+
+This change from high to low level programming is challenging. It requires a different way of thinking, one where you must be concerned with memory addresses, registers, the stack and lack the many tools high level languages provide. In return, for loosing the human-readable qualities of Python and R and Java and C#, you are rewarded with the ability to know exactly what is happening in your program. The lack of abstraction allows you to interact directly with the machine, allowing for code, that theoretically, cannot be optimised further. It also provides you with an insight into exactly how a computer works, removing a bit of the black-box-iness a modern computer can sometimes have.
 
 ## Introducing Instructions
+As mentioned above version of assembly found on the 6502 has around 55 instructions. Instructions are the building blocks used to create our programs. Instructions in the 6502 are not things like "while", "if" or "switch" but rather things that are much more fundamental. Instructions are things like addition, moving memory, and testing certain flags. The 6502 has no built-in way to perform a while loop or an if or switch statement - all these features need to be built by the programmer from the 55 instructions we have been given. This is really a very low number, especially considering the huge range of features a program can have. Considering some other archtectures the number appears tiny as well. The Z-80, another processor from the era had around 150 instructions while a modern machine, using x86-64 architecture will have over 2000 instructions. We will introduce assembly, and some of these core 6502 instructions in a set of 5 examples which discuss basic arithmatic and logic.
+
 ### Addition (CLC, CLD, LDA, ADC, STA)
 
 ```

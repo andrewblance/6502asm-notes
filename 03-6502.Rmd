@@ -1,6 +1,6 @@
 # The 6502 {#sixty}
 
-sixty-five-oh-two
+The 6502 (pronounced as "sixty-five-oh-two") is an old af microprocessor found in some fucking dope machines. The NES (kinda), the apple ii, the commodore 64. What a sick legacy. 
 
 ## System Organisation
 

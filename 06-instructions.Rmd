@@ -1,0 +1,166 @@
+# The Instruction Set {#inst}
+
+Gonna discuss the different types of instructions, and how they relate to whats available on the 6502. Then, a more in depth look at 'em all
+
+## Classes of Instruction
+
+Instructions sets can be classified in many way. For our purposes, we will split into five categories:
+
+* Data Transfer
+* Data Processing
+* Test and Branch
+* Input/ Output
+* Control
+
+We shall now explain what these categories consist of and how they relate to the indiviual instructions available on the 6502.
+
+### Data Transfer
+
+Data can be transferred in numerous ways. We can imagine a 8-bit data transfer between two registries, a transfer between registries and memory locations and registries to and IO device. Data transfer instructions can also serve more specialised purposes. For example, there can be instructions to push and pull things between the stack and the accumulator.
+
+The 6502 provides a thorough set of transfer instructions, with the exceptions of full control of the stack pointer. The contents of the accumulator can the exchanged with a memory location using:
+
+<center>
+
+[LDA](#LDA) (load) and [STA](#STA) (save)
+
+</center>
+
+With equivilent instructions for the X and Y registries:
+
+<center>
+
+[LDX](#LDX), [LDY](#LDY), [STX](#STX), [STY](#STY)
+
+</center>
+
+There is no direct loading to the S registry. However, there exists a range of instructions to allow transfers between the accumulator, X, Y and S registries. These are:
+
+<center>
+
+[TAX](#TAX), [TAY](#TAY), [TSX](#TSX), [TXA](#TXA), [TXS](#TXS), [TYA](#TYA)
+
+</center>
+
+To deal with the stack two types of instructions exist: push and pop. The pop instructions are:
+
+<center>
+
+[PHA](#PHA), [PHP](#PHP)
+
+</center>
+
+these will transfer the contents of A or P to the top of the stack and update the stack pointer. The "opposite" operations (push) are:
+
+<center>
+
+[PLA](#PLA), [PLP](#PLP)
+
+</center>
+
+These take the top item of the stack to store in A or P, then update the stack pointer.
+
+### Data Processing
+
+In this category we will be exposed to various limitations in the 6502. To process data effectively it is clear that we will want as many arithmetic operations as possible. However, instructions such as multiply and divide (as we have seen in Chapter \@ref(asm1)) are not available in many microprocessors from the era.
+
+It would also be useful to have operations that could shift bits around. For example, a way to swap the 2 nibbles in a byte. Again though, powerful instructions such as these are unavailable to us.
+
+Also missing are some useful shift and rotate operations. A normal shift operation will move all the bits in a registry or memory location to the left or right. The bit that "falls off" the end will be "catched" by the carry flag. The bit that is now "empty" will be filled by a $0$. Rotations work similarly, but instead of the empty bit being filled by a $0$ it is filled by the previous contents of the carry bit. This is a 9-bit rotation. It would be preferably to do a true 8-bit rotation (the contents of the left most bit immeditally being passed to the right-most location) but this is unavailable on most microprocessors. In the case of shifting two's complement numbers right you want the incoming bit to represent the number's sign. However, this cannot be guaranteed. An operation to provide this type of shift is not provided either.
+
+The operations that are available to use though are divided into 5 categories:
+
+* arithmetic
+[ADC](#ADC) 
+[SBC](#SBC)
+* logical operations
+[AND](#AND)
+[EOR](#EOR)
+[ORA](#ORA)
+* skew and shift
+[ASL](#ASL)
+[LSR](#LSR)
+[ROL](#ROL)
+[ROR](#ROR)
+* incrementing
+[DEC](#DEC)
+[DEX](#DEX)
+[DEY](#DEY)
+[INC](#INC)
+[INX](#INX)
+[INY](#INY)
+
+### Test and Branch
+
+Test instructions check all the bits in the flag registries of $0$ or $1$. We will want to be able to test combinations of these bits with a single instruction, be able to test any bit the flag registry and be able to test the value of a registry with any other registry. However, we are limited to testing a single bit of the flag registry.
+
+Jump instructions are split into three categories:
+
+* the jump proper, which requires a 16-bit address
+* the branch, which is restricted to an 8-bit displacement
+* the call, which is used in subroutines
+
+To expand on this, it would be useful to have three way branches, jumps that send you forward two or three instructions and a single command that would increment or decrement a value and then perform a test and branch. All these, exisitng as signle instructions, would allow more efficient programming. However, these are usually not available on microprocessors. What is available are simple tests and simple jumps.
+
+[BMI](#BMI)
+[BPL](#BPL)
+[BCC](#BCC)
+[BCS](#BCS)
+[BEQ](#BEQ)
+[BNE](#BNE) 
+[BVC](#BVC)
+[BVS](#BVS)
+[JMP](#JMP)
+[JSR](#JSR)
+[RTI](#RTI)
+[RTS](#RTS)
+[BIT](#BIT)
+[CMP](#CMP) 
+[CPX](#CPX)
+[CPY](#CPY)
+
+### Input/ Output
+
+Input/ Output instructions handle just that. However, most microprocessors use memory-mapped  IO. This means inputs and outputs are connected to memory addresses and are accessed like other memory locations. This means a wider variety of instructions can be applied to the IO devices. For efficient access to these devices it would be preferable if they were stored in page 0 of memory. However, is page 0 addressing is available it will be used for RAM, preventing its potential use for I/O devices. 
+
+There are no instructions for input and output on the 6502.
+
+### Control
+
+These instruction provide synchronisation signals and can interupt or suspend a program.
+
+The 6502 has numerous operations that can clear, or set, flags. The clear instructions are:
+
+<centre>
+
+[CLC](#CLC), [CLD](#CLD), [CLI](#CLI), [CLV](#CLV)
+
+</centre>
+
+These clear the clear, decimal, interupt and overflow bits. The set commands are:
+
+<centre>
+
+[SEC](#SEC), [SED](#SED), [SEI](#SEI)
+
+</centre>
+
+The break command can act as a software interupt:
+
+<centre>
+
+[BRK](#BRK)
+
+</centre>
+
+Finally, there in the No Op instruction. This has no effect and is usually used to extend timings in a loop
+
+<centre>
+
+[NOP](#NOP)
+
+</centre>
+
+## Conclusions {-}
+
+We have now seen every instruction available on the 6502. A more comprehensive look at the instruction set is located in Appendix A

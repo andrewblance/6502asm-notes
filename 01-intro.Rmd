@@ -2,8 +2,27 @@
 
 # Introduction {#intro}
 
-## why, just why?
+* The NES
+* whats a 6502
+* whats assembly
+* why is learning assembly hard (ie, why do we need to know binary, the system architecture, how an apple 2 works?)
 
-## coding now, and then
+## why, just why? {-}
 
-## whats here
+So theres a lot going on, why even do this?
+
+For Assembly:
+* get to learn some comp-sci, appreciate how computers work, de-black-box-ify them
+* its fun
+* solve Euler-Problem questions, but FAST
+
+For 6502:
+
+* 6502 assembly has a lot less instructions than modern assembly. This is both good and bad. Simple instructions, like multiplication simply do not exist. But, with only around 50 instructions we will be able to fully understand the system and hopefully, easier to learn.
+* If you want to make a NES game (yeah!) gotta begin with this
+* get to play with some old computing stuff
+* its fun
+
+## whats here {-}
+
+Describe all my lovely chapters
