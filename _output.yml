@@ -2,7 +2,8 @@ bookdown::gitbook:
   css: css/style.css
   config:
     toc:
-      collapse: none 
+      collapse: subsection
+      scroll_highlight: yes
       before: |
         <li><a href="./">Assembly Notes</a></li>
       after: |

@@ -1,0 +1,94 @@
+# Addressing Techniques {#AdsTec}
+
+When we talk about addressing, we are really asking "what is the source of data in our instructions"
+
+## Addressing Modes
+
+Addressing refers to specifying, inside the instruction, of the location of the operand on which the instruction will operate. There are numerous types of addressing modes, each specialising in a specific thing. The availabilitt of each mode is hardware specific as well, similar to the instruction classes we discussed in the previous chapter. Luckily, the 6502 has a diverse range of modes to choose from.
+
+### Implicit Addressing
+
+Instructions which operate on registers, usually, are _implicit_ instructions. These instructions do not explicitly contain the memory address they will operate on. Instead, these opcodes refer directly to the registers (eg, the accumulator). Since there are not many registers (usually <= 8) it will not require a lot of bits to encode these operations - a clear positive to these types of operations.
+
+The 6502 has numerous opcodes that use _implicit_ addressing. These fall into two categories. The first are ones which operate on registers - these take only 2 clock cycles to finish and are:
+
+<centre>
+
+[CLC](#CLC), [CLD](#CLD), [CLI](#CLI), [CLV](#CLV), [DEX](#DEX), [DEY](#DEY), [INX](#INX), [INY](#INY), [NOP](#NOP), [SEC](#SEC), [SED](#SED), [SEI](#SEI), [TAX](#TAX), [TAY](#TAY), [TSX](#TSX), [TXA](#TXA), [TXS](#TXS), [TYA](#TYA)
+
+</centre>
+
+The other require memory access and take 3 clock cyles to work. These are: 
+
+<centre>
+
+[BRK](#BRK), [PHA](#PHA), [PHP](#PHP), [PLA](#PLA), [PLP](#PLP), [RTI](#RTI), 
+[RTS](#RTS)
+
+</centre>
+
+### Immediate Addressing
+
+Here, the instruction is made from the opcode followed by an 8, or 16, bit literal (ie, a constant). This is needed to load 8-bit values into 8-bit registers. Of course, if the hardware allows it the same can be done with 16-bit values. 
+
+In the case of the 6502, the hardware limits us to using only 8-bit constants for immediate addressing. These instruction are therefore all 2 bytes in length - one for the opcode and one for the literal to be loaded or used in an arithmetic procedure. The instructions available are:
+
+<centre>
+
+[ADC](#ADC), [AND](#AND), [CMP](#CMP), [CPX](#CPX), [CPY](#CPY), [EOR](#EOR), [LDA](#LDA), [LDX](#LDX), [LDY](#LDY), [ORA](#ORA), [SBC](#SBC)
+
+</centre>
+
+### Absolute Addressing
+
+This is the form of addressing more usually used to retrieve data from memory. In _absolute_ addressing the opcode is followed by a 16-bit address. A disadvantage here is that this will be a 3-byte instruction and hence a computationally expensive procedure. Other, more efficient, forms of addressing can sometimes be used to compensate for this
+
+In the 6502, as expected, all absolute addressing instructions require 3 bytes. For all these instructions, except for JMP, they require 4 clock cycles. The opcodes available for this mode are:
+
+<centre>
+
+[ADC](#ADC), [AND](#AND), [ASL](#ASL), [BIT](#BIT), [CMP](#CMP), [CPX](#CPX), [CPY](#CPY), [DEC](#DEC), [EOR](#EOR), [INC](#INC), [JMP](#JMP), [JSR](#JSR), [LDA](#LDA), [LDX](#LDX), [LDY](#LDY), [LSR](#LSR), [ORA](#ORA), [ROL](#ROL), 
+[ROR](#ROR), [SBC](#SBC), [STA](#STA), [STX](#STX), [STY](#STY)
+
+</centre>
+
+### Direct Addressing
+
+With _direct_ addressing the opcode is followed by a 8-bit address. This provides an efficiency improvement over absolute addressing as it is only a 2-byte instruction. However we will be restricted to addresses between 0 and 255. This is called 0 page. Because of this, direct addressing is sometimes known as _zero-page_ addressing.
+
+_Zero-page_ addressing requires 3 clock cycles. This is a significant speed up in comparison to absolute addressing and should therefore be used when possible. In the 6502, we will view the first 256 memory locations as working registers. This space, because of its inherit efficiency should be used to contain the most essential data that requires to be fetched at high speed. This will require careful memory management. The list of legal opcodes are: 
+
+<centre>
+
+[ADC](#ADC), [AND](#AND), [ASL](#ASL), [BIT](#BIT), [CMP](#CMP), [CPX](#CPX), [CPY](#CPY), [DEC](#DEC), [EOR](#EOR), [INC](#INC), [LDA](#LDA), [LDX](#LDX), [LDY](#LDY), [LSR](#LSR), [ORA](#ORA), [ROL](#ROL), [ROR](#ROR), [SBC](#SBC), [STA](#STA), [STX](#STX), [STY](#STY)
+
+</centre>
+
+### Relative Addressing
+
+_Relative_ addressing is used primarily in jump or branch operations. In these, you would expect, it to be a 3-byte instruction - the opcode and a 16-bit address. However, we can reduce this to 2 bytes by only providing an 8-bit address which will displace us from our current position. This will allow us to move 128 locations forward or backword.
+
+To differentiate this mode from the jump instruction we will refer to this as _Branches_. On the 6502 branches exclusively use the relative addressing mode whereas the jump instruction uses the absolute addressing mode. Timing (ie, number of clock cycles) for branches is something that should be considered carefully.
+
+* If the test before the branch fails, and no branching needs to occur, this will take two clock cycles.
+* If the test passes, a new memory address will need to be found and therefore the operation will take 3 cycles
+* If the branching occurs, and the new memory address is found to be on the next page a carry or a borrow will be generated. This will result in the program taking 4 cycles. The movement from one page to another is something the hardware will deal with. However, some care must be taken depending on the context of when this will happen. For example, a loop where exact timing is important. 
+
+In the 6502 the only instructions in this mode are the 8 branch instructions that test the flags. These are:
+
+<centre>
+
+[BCC](#BCC), [BCS](#BCS), [BEQ](#BEQ), [BMI](#BMI), [BNE](#BNE), [BPL](#BPL). [BVC](#BVC), [BVS](#BVS)
+
+</centre>
+
+### Indexed Addressing
+
+### Pre and Post-indexing
+
+### Indirect Addressing
+
+### Combinations
+
+## Using the 6502 Modes
+
