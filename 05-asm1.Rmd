@@ -5,6 +5,7 @@ things to mention:
 * working registers ?? 
 * relationship between clock cyles and instruction length
 * the carry and borrowing when crossing a page
+* clear up endian stuff
 * The next 3 sections really try to break down the contents of an instruction
 
 # Intro to the 6502 Assembly {#asm1}

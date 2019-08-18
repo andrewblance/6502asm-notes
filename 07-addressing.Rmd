@@ -82,11 +82,21 @@ In the 6502 the only instructions in this mode are the 8 branch instructions tha
 
 </centre>
 
+### Indirect Addressing
+
+Many programs may want to be able to access a large block of memory. This block may grow or shrink dynamically, meaning keeping track of all the absolute addresses would be difficuly. Clearly, it is desirable to not keep this block stored at a fixed location. The solution is to keep the starting address of the block at a fixed location. Then, if you need access to this block you just need to access the one memory location to find where the block is. 
+
+These instructions are an 8-bit opcode followed by a 16-bit address. These instructions are simply used to retrieve a word from memory
+
 ### Indexed Addressing
 
-### Pre and Post-indexing
+Following on from indirect addressing, _Indexed_ addressing is used to access multiple successive elements withing a block. The instruction is supplied with an opcode, an address and an index register. There are two forms this can happen in:
 
-### Indirect Addressing
+#### _Pre-indexing_ (Indirect Indexed) {-}
+Here, a zero-page vector is combined with a index register. First, the address is found from the zero-page vector, then the index register value is added to that to provide the target address.
+
+#### _Post-indexing_ (Indexed Indirect){-}
+Again, a zero-page vector is combined with a index register. The subtle difference is that the zero-page vector and index register value are combined immediately. Then, from this the target address is found.
 
 ### Combinations
 
