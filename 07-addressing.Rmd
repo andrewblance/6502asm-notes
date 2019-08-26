@@ -82,23 +82,86 @@ In the 6502 the only instructions in this mode are the 8 branch instructions tha
 
 </centre>
 
+### Indexed Addressing
+
+_Indexed_ addressing is used to access multiple successive elements withing a block. The instruction is supplied with an opcode, an address and an index register. Here, the index register is used as a counter to access elements in the block. This is why we have numerous, specialised instructions to increment, decrement, and compare index registers against memory locations. There are two forms this can happen in:
+
+* _absolute addressing_: Here, we use a 16 bit address and we are able to use register X or Y.
+* _zero-page_: Here, we must use a 8 bit zero-page address, and are limited to using only register X (except for opcodes LDX and STX, which can also be modified by Y)
+
 ### Indirect Addressing
 
 Many programs may want to be able to access a large block of memory. This block may grow or shrink dynamically, meaning keeping track of all the absolute addresses would be difficuly. Clearly, it is desirable to not keep this block stored at a fixed location. The solution is to keep the starting address of the block at a fixed location. Then, if you need access to this block you just need to access the one memory location to find where the block is. 
 
-These instructions are an 8-bit opcode followed by a 16-bit address. These instructions are simply used to retrieve a word from memory
+These instructions are an 8-bit opcode followed by an address. These instructions are simply used to retrieve a word from memory.
 
-### Indexed Addressing
+The 6502 does not provide a general way to do this. By that, it is meant that the address field is limited to 8 bits. In effect, this is a form of _zero-page_ addressing. The effective 16-bit address (the one that indicates the start of the block) is found by using the 8-bit zero-page address in the instruction. This is done in 2 steps. Firstly, the 8-bit address returns the least significant bit of the 16-bit target address. The other bit of the target address is found in the address that follows on from the one in the instruction. Furthermore, these instructions must be indexed. Indirect addressing can happen in 2 (and a half) ways.
 
-Following on from indirect addressing, _Indexed_ addressing is used to access multiple successive elements withing a block. The instruction is supplied with an opcode, an address and an index register. There are two forms this can happen in:
+#### _Pre-indexing_ (Indexed Indirect) {-}
+Here, the 16-bit address is found, the contents of X are added, then this value is dereferenced and used as the "true" target address.
 
-#### _Pre-indexing_ (Indirect Indexed) {-}
-Here, a zero-page vector is combined with a index register. First, the address is found from the zero-page vector, then the index register value is added to that to provide the target address.
+```
+    LDX   #$01
+    LDA   #$05
+    STA   $01
+    LDA   #$07
+    STA   $02
+    LDA   ($00,X)
+```
 
-#### _Post-indexing_ (Indexed Indirect){-}
-Again, a zero-page vector is combined with a index register. The subtle difference is that the zero-page vector and index register value are combined immediately. Then, from this the target address is found.
+Indexed Indirect can seem like a strange method. The X register is loaded with ```#$01```, ```$01``` is loaded with ```#$05``` and ```$02``` is loaded with ```#$07```. The final line (```LDA   ($00,X)```) is the confusing one. X is added onto ```$00```, giving us ```$01```. Then, the contents of ```$01``` and ```$02``` are loaded to give the final answer, which is the true target address, is: ```$0705```.
+
+
+#### _Post-indexing_ (Indirect Indexed) {-}
+In this scenario the 16-bit address is found and dereferenced, then the contents of the Y register are added. This is what is used as the "true" target address. Here is an example:
+
+```
+    LDY   #$01  
+    LDA   #$03
+    STA   $01
+    LDA   #$07
+    STA   $02
+    LDA   ($01),Y
+```
+
+Lets follow this through, and find the result. Index register Y is stored with ```#$01```, then ```$01``` is loaded with ```#$03``` and ```$02``` is loaded with ```#$07```. The final line, ```LDA   ($01),Y```, will load ```$01``` and ```$02```, returning the address ```#0703```, which we will add the contents of Y onto. This gives the final answer, and true target address, ```#0704```.
+
+#### An Exception to all the Rules
+
+There is one important exception to all these rules that we must discuss before continuing, which is:
+
+<centre>
+
+[JMP](#JMP)
+
+</centre>
+
+The Jump command uses an absolute address to do indirect addressing, and requires no indexing. The address in the instruction contains the least significant bit of the 16-bit target address. The other bit of the target address is found in the address that follows on from the one in the instruction.
+
+```
+    LDA   #$01
+    STA   $f0
+    LDA   #$FF
+    STA   $f1
+    JMP   ($00f0)   ;dereferences to $FF01
+```
+Here, ```#$01``` is loaded into ```$f0```, and ```#$FF``` is loaded into ```$f1```. Then a jump takes us to ```$00f0```. The result, and target address, will therefore the ```$FF01```.
 
 ### Combinations
 
 ## Using the 6502 Modes
 
+### Long and Short Addressing
+
+### Indexing for Sequential Block Access
+
+### Block Transfer (<256 elements)
+
+### Block Transfer (>256 elements)
+
+### Adding Two Blocks
+
+
+## Conclusions
+
+* confusing. But, most microprocessors give you much less options. 

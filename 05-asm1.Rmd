@@ -1,14 +1,18 @@
 # (PART) Assembly {-}
 
+# Intro to the 6502 Assembly {#asm1}
+
 things to mention:
+
 * opcodes and instructions - clarification
 * working registers ?? 
 * relationship between clock cyles and instruction length
 * the carry and borrowing when crossing a page
 * clear up endian stuff
+* dereferenced ??
+* counting bytes and cycles
+* BPL v BNE and other branching things
 * The next 3 sections really try to break down the contents of an instruction
-
-# Intro to the 6502 Assembly {#asm1}
 
 Assembly is fundamentally different from most languages used at the moment. The version that is used on the 6502 is significantly different again from modern assembly. Regardless, I believe there is still value in learning this branch of assembly. While it is still complex, the architecture of the 6502 is simple in comparison to a modern processor. This relationship is true as well when comparing the instruction sets on 6502 assembly and x86-64 assembly (the version modern intel processors use). I argue, that this reduced complexity makes this earlier version a more pedagogical language.
 
