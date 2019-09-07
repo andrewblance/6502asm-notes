@@ -1,4 +1,4 @@
-# (PART) Assembly {-}
+# (PART) Assembly Basics {-}
 
 # Intro to the 6502 Assembly {#asm1}
 

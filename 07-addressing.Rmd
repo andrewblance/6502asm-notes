@@ -161,6 +161,44 @@ Here, ```#$01``` is loaded into ```$f0```, and ```#$FF``` is loaded into ```$f1`
 
 ### Adding Two Blocks
 
+### Largest Value
+
+```
+  LDA #$05 ; these 4 lines put $0205 into p0
+  STA $01
+  LDA #$02
+  STA $02
+
+  LDY #05
+lowList:     ; deal with 5 to 1
+  TYA
+  STA ($01),Y
+  DEY
+  BNE lowList
+
+  LDX #15
+  LDY #05
+highList:     ; deal with 15 to 11
+  TXA
+  INY
+  STA ($01),Y
+  DEX
+  CPX #10
+  BCS highList ; if X > 10, loop
+
+  LDY #10   ; reload Y
+  LDA ($01),Y   ; Assume last is biggest
+loop:
+  CMP ($01), Y  ; compare with next
+  BCS smaller
+bigger:
+  LDA ($01), Y  ; Bigger (or same) replace best
+smaller:
+  DEY  ; Reached the first?
+  BPL loop
+  STA $0220
+  RTS  ; Done
+```
 
 ## Conclusions
 
