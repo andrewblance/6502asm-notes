@@ -4,10 +4,6 @@
 
 So, you probs want to be able to talk to devices, but how? Read on, and learn.
 
-Figure out:
-
-* relationship between io and pio
-
 ## Basics
 
 To communicate with the outside world, and receive communication back, we will need to learn how to create, and receive, signals and pulses. To deal with these correctly we will also need to cover how properly enforce timings in our programs. 
@@ -102,8 +98,114 @@ The code detects a pulse, as before, then enters a second loop. Here, it increme
 
 ## Bit Transfer
 
+We have looked at how we can look for, and create, pulses. Now, we can move on and look at how we can receive data after this is done. We have two options for this: parallel bit transfer and serial bit transfer.
+
 ### Parallel Bit Transfer
+
+Here, we assume 8 bits of data needing transferred all exist at the address INPUT. So, it will be assumed that when a certain status word is valid, the data has been assembled at INPUT and is ready to be read. For simplicity, we will assume the number of words needing to be read is known. Here is code to do that:
+
+```
+PARAL   LDX   COUNT   ; our counter
+WATCH   LDA   STATUS  ; load out status
+        BPL   WATCH   ; are we ready to read the input?
+        LDA   INPUT   ; if yes - load it!
+        PHA           ; send to stack
+        DEX           ; dec counter
+        BNE   WATCH   ; if more words are gonna come, start loop again
+
+```
+
+Some notes:
+
+* We have assumed we know the number of words to read. This may not be the case. If it was not, we could test to check for the presence of a _break-out character_, indicating the transmission has ended.
+* We need to be mindful of the size of our stack. If we are transmitting more words than available stack space we can cause an overflow. To avoid this we could store to a specific memory location.
 
 ### Serial Bit Transfer
 
+A more complex case is serial bit transfer. Here, the information will come in one at a time. This can be in either regular intervals (_synchronous transfers_), or in bursts (_asynchronous transfers_). We need to be able to account for both. 
+
+Our program will watch the status of an input and when detected read it in. Unlike before, we will be storing it in an input register. When 8 bits have assembled it will be preserved in memory and the process can begin again. Again, we will assume we know the amount of data coming in. 
+
+```
+SERIAL    LDA   #$00
+          STA   WORD
+LOOP      LDA   INPUT
+          BPL   LOOP
+          LSR   A     ; if data is ready, bit from A to C
+          ROL   WORD  ; shift from C to memory
+          BCC   LOOP  ; continue if C=0
+          LDA   WORD  
+          PHA         ; load assembled word from A to stack
+          LDA   #$01  ; reset bit counter
+          STA   WORD
+          DEC   COUNT
+          BNE   LOOP  ; if more words to come, start again
+```
+
+We assume the following things:
+
+* COUNT contains the number of incoming words
+* WORD is the memory location we want to store the 8 incoming bits at
+* INPUT is the input register. Bit 7 will contain the status. Bit 0 will contain the data.
+* The first bit of incoming data will be a ```1```, which indicates data will follow.
+
+This program is quite complex, so we can go through it in chunks. 
+
+The first four lines are very similar to our previous programs - they check the status of the incoming data.
+
+```
+          LSR   A     ; if data is ready, bit from A to C
+          ROL   WORD  ; shift from C to memory
+          BCC   LOOP  ; continue if C=0
+```
+
+The above chuck, the "second" part of the code, handles what to do if the input is valid. The bits are now stored in the accumulator. The first line now shifts the content of the accumulator right one bit. This will cause bit 0, the bit containing the relevent data to fall into the carry bit. The ROL command cause the carry bit to fall into the right-most position of WORD but also cause the contents of the left-most position of WORD to fall into the carry. WORD will now contain ```0000 0001``` and C will contain ```0```. Finally, as long as the carry contains a zero, the loop will continue. If not, and the carry contains a ```1```, it means we have recovered 8 bits and we can break out. This can then be pushed to the stack, which is exactly what happens in the next two lines:
+
+```
+          LDA   WORD  
+          PHA         ; load assembled word from A to stack
+```
+
+Lets continue to the last four lines:
+
+```
+          LDA   #$01  ; reset bit counter
+          STA   WORD
+          DEC   COUNT
+          BNE   LOOP  ; if more words to come, start again
+```
+
+Now that we have assembled the first bit, there is no longer a guarentee the next bit we see will be a ```1```. The first two lines will correct this by sending ```0000 0001``` to the accumulator. Then, we decrement the counter and, if applicable, loop around.
+
+
+This code has numerous interesting things to consider:
+
+* We have an inbuilt way, by using the LSR and ROL instructions and tracking a ```1```, to tell if we have incoming data. If we did not do this we would have to use (potentially waste?) a register to count. 
+* Bit 7 and 0 are good choices, as they allowing for easy testing and shifting.
+* Still, we are pushing to the stack. What if we need more memory? It might be better to store to a memory address.
+* We are assuming that the first bit will be a ```1```. What if it is not?
+* Using the BIT instruction, we can test and transfer bits and not effect the accumulator. This would mean A could be used to store incoming bits.
+
+Lets rewrite the code to account for these issues:
+
+```
+          LDX   #0
+START     LDA   #$01    ; this will ensure the first bit is always 1
+LOOP      BIT   INPUT   ; BIT will transfer bit 7 to the sign flag
+          BPL   LOOP    ; test contents of sign flag
+          LSR   INPUT   ; if data is ready, input bit 0 to C
+          ROL   A       ; shift from C to A
+          BCC   LOOP    ; continue if C=0
+          STA   BASE,X  ; send A to memory location base,x 
+          INX       
+          DEC   COUNT
+          BNE   START   ; if more words to come, start again
+```
+
 ## Conclusions
+
+We have looked at the basic structure of I/O communication. We've seen how to send and receive pulses and deal with delays. Once it is possible to detect these we have seen a range of options when it comes to how to receive data, both synchronously and asynchronously. The next thing to deal with is how to communicate with devices.
+
+
+
+

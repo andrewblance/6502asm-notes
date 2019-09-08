@@ -1,1 +1,6 @@
 # Communicating with Devices {#io2}
+
+
+Figure out:
+
+* relationship between io and pio (in a way, i dont really care)
