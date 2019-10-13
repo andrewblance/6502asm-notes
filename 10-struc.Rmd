@@ -1,0 +1,22 @@
+# (PART) Program Structures {-}
+
+# Design Concepts {#dc}
+
+## Pointers
+
+## Lists 
+
+* Sequential Lists
+* Directories
+* Linked List
+* Queue
+* Stack
+* Circular List
+* Trees
+* Doubly-Linked Lists
+
+## Searching and Sorting
+
+you gotsta search
+
+## Conclusions

@@ -4,3 +4,23 @@
 Figure out:
 
 * relationship between io and pio (in a way, i dont really care)
+
+## Handshaking
+
+### Printers
+
+### LEDs
+
+### Teletype
+
+## Scheduling and Interupts
+
+### Polling
+
+### Interupts
+
+### Multiple Devices
+
+## Programmable I/O
+
+## Conclusions
